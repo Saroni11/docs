@@ -1,64 +1,23 @@
-name: Remove stale staging resources
-
-# **What it does**:
-# This cleans up any rogue staging applications and environments that outlasted
-# the closure of their corresponding pull requests.
-# **Why we have it**:
-# Staging applications and environments sometimes fail to be destroyed when
-# their corresponding pull request is closed or merged.
-# **Who does it impact**:
-# Anyone with a closed, spammy, or deleted pull request in docs or docs-internal.
-
-on:
-  schedule:
-    - cron: '15,45 * * * *' # every thirty minutes at :15 and :45
-
-permissions:
-  contents: read
-  pull-requests: read
-
-jobs:
-  remove_stale_staging_apps:
-    name: Remove stale staging apps
-    if: ${{ github.repository == 'github/docs-internal' }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out repo's default branch
-        uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579
-
-      - name: Setup Node
-        uses: actions/setup-node@04c56d2f954f1e4c69436aa54cfef261a018f458
-        with:
-          node-version: 16.13.x
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run script
-        run: script/remove-stale-staging-apps.js
-        env:
-          HEROKU_API_TOKEN: ${{ secrets.HEROKU_API_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  remove_stale_staging_envs:
-    name: Remove stale staging environments
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out repo's default branch
-        uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579
-
-      - name: Setup Node
-        uses: actions/setup-node@04c56d2f954f1e4c69436aa54cfef261a018f458
-        with:
-          node-version: 16.13.x
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run script
-        run: script/remove-stale-staging-envs.js
-        env:
-          GITHUB_TOKEN: ${{ secrets.DOCS_BOT_FR }}
-          REPO: ${{ github.repository }}
+- name: Setup Java JDK
+  uses: actions/setup-java@v1.4.4
+  with:
+    # The Java version to make available on the path. Takes a whole or semver Java version, or 1.x syntax (e.g. 1.8 => Java 8.x). Early access versions can be specified in the form of e.g. 14-ea, 14.0.0-ea, or 14.0.0-ea.28
+    java-version: 
+    # The package type (jre, jdk, jdk+fx)
+    java-package: # optional, default is jdk
+    # The architecture (x86, x64) of the package.
+    architecture: # optional, default is x64
+    # Path to where the compressed JDK is located. The path could be in your source repository or a local path on the agent.
+    jdkFile: # optional
+    # ID of the distributionManagement repository in the pom.xml file. Default is `github`
+    server-id: # optional, default is github
+    # Environment variable name for the username for authentication to the Apache Maven repository. Default is $GITHUB_ACTOR
+    server-username: # optional, default is GITHUB_ACTOR
+    # Environment variable name for password or token for authentication to the Apache Maven repository. Default is $GITHUB_TOKEN
+    server-password: # optional, default is GITHUB_TOKEN
+    # Path to where the settings.xml file will be written. Default is ~/.m2.
+    settings-path: # optional
+    # GPG private key to import. Default is empty string.
+    gpg-private-key: # optional
+    # Environment variable name for the GPG private key passphrase. Default is $GPG_PASSPHRASE.
+    gpg-passphrase: # optional
