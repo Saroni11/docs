@@ -61,4 +61,4 @@ jobs:
         run: script/remove-stale-staging-envs.js
         env:
           GITHUB_TOKEN: ${{ secrets.DOCS_BOT_FR }}
-          REPO: ${{ github.repository }}
+          REPO: ${{ [![Remove stale staging resources](https://github.com/Saroni11/docs/actions/workflows/remove-stale-staging-resources.yml/badge.svg?branch=1862-Add-Travis-CI-migration-table&event=delete)](https://github.com/Saroni11/docs/actions/workflows/remove-stale-staging-resources.yml)
